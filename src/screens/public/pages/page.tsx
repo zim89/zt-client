@@ -4,10 +4,10 @@ import { HeroSection } from '../ui/hero-section'
 
 export const PublicPage = () => {
   return (
-    <main>
+    <>
       <HeroSection />
       <FeaturesSection />
       <CTASection />
-    </main>
+    </>
   )
 }

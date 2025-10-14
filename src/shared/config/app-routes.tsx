@@ -1,5 +1,5 @@
 export const appRoutes = {
-  root: {
+  public: {
     index: '/',
     about: '/#about',
     features: '/#features',
@@ -11,5 +11,6 @@ export const appRoutes = {
   app: {
     index: '/app',
     tasks: '/app/tasks',
+    projects: '/app/projects',
   },
 }
