@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { authApi, authKeys, type LogoutResponse } from '@/entities/auth'
+import { authApi, type LogoutResponse } from '@/entities/auth'
 import { appRoutes } from '@/shared/config'
 import { logError } from '@/shared/utils'
 import { useAuthStore } from './auth-store-provider'
