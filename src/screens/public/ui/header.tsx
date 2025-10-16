@@ -9,7 +9,7 @@ export const Header = () => {
       <div className='container flex h-16 items-center justify-between'>
         {/* Logo */}
         <Link
-          href={appRoutes.root.index}
+          href={appRoutes.public.index}
           className='flex items-center space-x-3'
         >
           <Logo size='md' />
@@ -21,13 +21,13 @@ export const Header = () => {
         {/* Navigation */}
         <nav className='hidden items-center space-x-6 md:flex'>
           <Link
-            href={appRoutes.root.about}
+            href={appRoutes.public.about}
             className='hover:text-primary text-sm font-medium transition-colors'
           >
             About
           </Link>
           <Link
-            href={appRoutes.root.features}
+            href={appRoutes.public.features}
             className='hover:text-primary text-sm font-medium transition-colors'
           >
             Features

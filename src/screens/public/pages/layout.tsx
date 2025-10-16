@@ -7,9 +7,9 @@ type Props = {
 
 export const PublicLayout = ({ children }: Props) => {
   return (
-    <div className='min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800'>
+    <div className='min-h-screen'>
       <Header />
-      {children}
+      <main>{children}</main>
     </div>
   )
 }

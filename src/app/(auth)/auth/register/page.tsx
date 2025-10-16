@@ -1,5 +1,7 @@
+import { RegisterPage } from '@/screens/auth'
+
 const Page = () => {
-  return <div>Register page</div>
+  return <RegisterPage />
 }
 
 export default Page
