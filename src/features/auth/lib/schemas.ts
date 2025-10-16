@@ -17,16 +17,16 @@ export type LoginFormData = z.infer<typeof loginSchema>
  * Register form validation schema
  */
 export const registerSchema = z.object({
-  firstName: z
-    .string()
-    .min(1, 'First name is required')
-    .min(2, 'First name must be at least 2 characters')
-    .optional(),
-  lastName: z
-    .string()
-    .min(1, 'Last name is required')
-    .min(2, 'Last name must be at least 2 characters')
-    .optional(),
+  // firstName: z
+  //   .string()
+  //   .min(1, 'First name is required')
+  //   .min(2, 'First name must be at least 2 characters')
+  //   .optional(),
+  // lastName: z
+  //   .string()
+  //   .min(1, 'Last name is required')
+  //   .min(2, 'Last name must be at least 2 characters')
+  //   .optional(),
   email: z
     .string()
     .min(1, 'Email is required')

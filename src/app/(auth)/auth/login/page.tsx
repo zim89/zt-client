@@ -1,5 +1,7 @@
+import { LoginPage } from '@/screens/auth'
+
 const Page = () => {
-  return <div>Login page</div>
+  return <LoginPage />
 }
 
 export default Page

@@ -50,9 +50,9 @@ export const LoginForm = ({ className }: Props) => {
   return (
     <Card className={cn('w-full max-w-md', className)}>
       <CardHeader>
-        <CardTitle className='text-2xl'>Welcome back</CardTitle>
+        <CardTitle className='text-2xl'>Login to your account</CardTitle>
         <CardDescription>
-          Enter your email and password to access your account
+          Enter your email below to login to your account
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -40,8 +40,6 @@ export const RegisterForm = ({ className }: Props) => {
     defaultValues: {
       email: '',
       password: '',
-      firstName: '',
-      lastName: '',
     },
   })
 
@@ -54,42 +52,12 @@ export const RegisterForm = ({ className }: Props) => {
       <CardHeader>
         <CardTitle className='text-2xl'>Create an account</CardTitle>
         <CardDescription>
-          Enter your information to get started with ZenTask
+          Enter your information below to create your account
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-            {/* First Name field */}
-            <FormField
-              control={form.control}
-              name='firstName'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name (optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder='John' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Last Name field */}
-            <FormField
-              control={form.control}
-              name='lastName'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name (optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder='Doe' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             {/* Email field */}
             <FormField
               control={form.control}

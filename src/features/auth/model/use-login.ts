@@ -11,7 +11,7 @@ import {
   type LoginDto,
 } from '@/entities/auth'
 import { appRoutes } from '@/shared/config'
-import { queryParamsKeys } from '@/shared/constants'
+import { queryParamKeys } from '@/shared/constants'
 import { logError } from '@/shared/utils'
 import { useAccessToken, useAuthStore, useUserId } from './auth-store-provider'
 
@@ -40,7 +40,7 @@ type UseLoginOptions = {
 export const useLogin = (options: UseLoginOptions = {}) => {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const [redirect] = useQueryState(queryParamsKeys.redirect)
+  const [redirect] = useQueryState(queryParamKeys.redirect)
   const setAuth = useAuthStore(state => state.setAuth)
 
   const userId = useUserId()
