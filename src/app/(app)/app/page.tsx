@@ -1,5 +1,7 @@
+import { AppPage } from '@/screens/app'
+
 const Page = () => {
-  return <div>App page</div>
+  return <AppPage />
 }
 
 export default Page
