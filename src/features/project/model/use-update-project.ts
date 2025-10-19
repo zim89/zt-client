@@ -64,6 +64,7 @@ export const useUpdateProject = (options: UseUpdateProjectOptions = {}) => {
         queryKey: projectKeys.detail(variables.id),
       })
       queryClient.invalidateQueries({ queryKey: projectKeys.all() })
+      queryClient.invalidateQueries({ queryKey: projectKeys.names({}) })
 
       // Call success callback
       options.onSuccess?.(data)

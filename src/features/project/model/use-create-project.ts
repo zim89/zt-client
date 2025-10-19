@@ -38,6 +38,7 @@ export const useCreateProject = (options: UseCreateProjectOptions = {}) => {
 
       // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: projectKeys.all() })
+      queryClient.invalidateQueries({ queryKey: projectKeys.names({}) })
 
       // Call success callback
       options.onSuccess?.(data)
