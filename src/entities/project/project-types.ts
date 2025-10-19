@@ -17,6 +17,16 @@ export type ProjectParams = {
   userId?: string
 }
 
+/** Parameters for project names requests (sidebar) */
+export type ProjectNamesParams = {
+  search?: string
+  sortBy?: string
+  sortOrder?: 'asc' | 'desc'
+  isFavorite?: boolean
+  isActive?: boolean
+  isHidden?: boolean
+}
+
 // ==============================
 // MAIN TYPES
 // ==============================
@@ -57,6 +67,16 @@ export type ProjectWithCount = Project & {
 /** Project with membership information */
 export type ProjectWithMembership = Project & {
   membership?: Membership
+}
+
+/** Project name response for sidebar (minimal data) */
+export type ProjectNameResponse = {
+  id: string
+  name: string
+  slug: string
+  isFavorite: boolean
+  isHidden: boolean
+  incompleteTasksCount: number
 }
 
 // ==============================

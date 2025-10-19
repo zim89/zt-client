@@ -12,6 +12,14 @@ export type MarkerParams = {
   isDefault?: boolean
 }
 
+/** Parameters for marker names requests (sidebar) */
+export type MarkerNamesParams = {
+  search?: string
+  sortBy?: string
+  sortOrder?: 'asc' | 'desc'
+  isDefault?: boolean
+}
+
 // ==============================
 // MAIN TYPES
 // ==============================
@@ -53,4 +61,14 @@ export type UpdateMarkerDto = {
   name?: string
   fontColor?: string
   bgColor?: string
+}
+
+/** Marker name response for sidebar (minimal data without task count) */
+export type MarkerNameResponse = {
+  id: string
+  name: string
+  slug: string
+  isDefault: boolean
+  fontColor: string | null
+  bgColor: string | null
 }

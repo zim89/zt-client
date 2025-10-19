@@ -1,4 +1,5 @@
 export * from './use-find-markers'
+export * from './use-find-marker-names'
 export * from './use-find-marker-by-id'
 export * from './use-find-marker-by-slug'
 export * from './use-create-marker'

@@ -2,6 +2,8 @@ import { apiRoutes, axiosClient } from '@/shared/api'
 import { PaginatedResponse } from '@/shared/types'
 import type {
   CreateMarkerDto,
+  MarkerNameResponse,
+  MarkerNamesParams,
   MarkerParams,
   MarkerWithCount,
   UpdateMarkerDto,
@@ -12,6 +14,27 @@ import type {
  * Contains all HTTP methods for marker operations
  */
 class MarkerRequests {
+  /**
+   * Find marker names for sidebar (minimal data without task count)
+   */
+  async findNames(params?: MarkerNamesParams): Promise<MarkerNameResponse[]> {
+    const searchParams = new URLSearchParams()
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value))
+        }
+      })
+    }
+
+    const response = await axiosClient.get<MarkerNameResponse[]>(
+      `${apiRoutes.marker.findNames}?${searchParams.toString()}`,
+    )
+
+    return response.data
+  }
+
   /**
    * Find marker by ID
    */

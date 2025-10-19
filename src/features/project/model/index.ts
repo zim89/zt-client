@@ -1,4 +1,5 @@
 export * from './use-find-projects'
+export * from './use-find-project-names'
 export * from './use-find-project-by-id'
 export * from './use-find-project-by-slug'
 export * from './use-create-project'

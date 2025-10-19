@@ -1,6 +1,6 @@
 import { markerKeys } from './marker-keys'
 import { markerRequests } from './marker-requests'
-import type { MarkerParams } from './marker-types'
+import type { MarkerNamesParams, MarkerParams } from './marker-types'
 
 /**
  * API class for marker operations
@@ -10,6 +10,7 @@ class MarkerApi {
   findById = markerRequests.findById
   findBySlug = markerRequests.findBySlug
   findMany = markerRequests.findMany
+  findNames = markerRequests.findNames
   create = markerRequests.create
   update = markerRequests.update
   delete = markerRequests.delete
@@ -43,6 +44,16 @@ class MarkerApi {
     return {
       queryKey: markerKeys.list(params || {}),
       queryFn: () => this.findMany(params),
+    }
+  }
+
+  /**
+   * Query options for finding marker names
+   */
+  findNamesOptions(params?: MarkerNamesParams) {
+    return {
+      queryKey: markerKeys.names(params || {}),
+      queryFn: () => this.findNames(params),
     }
   }
 }

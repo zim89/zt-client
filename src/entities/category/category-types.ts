@@ -12,6 +12,13 @@ export type CategoryParams = {
   projectId?: string
 }
 
+/** Parameters for category names requests (sidebar) */
+export type CategoryNamesParams = {
+  search?: string
+  sortBy?: string
+  sortOrder?: 'asc' | 'desc'
+}
+
 // ==============================
 // MAIN TYPES
 // ==============================
@@ -50,4 +57,12 @@ export type CreateCategoryDto = {
 export type UpdateCategoryDto = {
   name?: string
   description?: string
+}
+
+/** Category name response for sidebar (minimal data with incomplete tasks count) */
+export type CategoryNameResponse = {
+  id: string
+  name: string
+  slug: string
+  incompleteTasksCount: number
 }

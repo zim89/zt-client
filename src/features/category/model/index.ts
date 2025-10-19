@@ -1,4 +1,5 @@
 export * from './use-find-categories'
+export * from './use-find-category-names'
 export * from './use-find-category-by-id'
 export * from './use-find-category-by-slug'
 export * from './use-create-category'

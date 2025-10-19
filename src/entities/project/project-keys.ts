@@ -1,4 +1,4 @@
-import type { ProjectParams } from './project-types'
+import type { ProjectNamesParams, ProjectParams } from './project-types'
 
 export const projectKeys = {
   root: ['project'] as const,
@@ -7,6 +7,9 @@ export const projectKeys = {
   lists: () => [...projectKeys.all()] as const,
   list: (filters: ProjectParams) =>
     [...projectKeys.lists(), { filters }] as const,
+
+  names: (filters: ProjectNamesParams) =>
+    [...projectKeys.root, 'names', { filters }] as const,
 
   details: () => [...projectKeys.root, 'detail'] as const,
   detail: (id: string) => [...projectKeys.details(), id] as const,

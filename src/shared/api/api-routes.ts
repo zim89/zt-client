@@ -9,6 +9,7 @@ export const apiRoutes = {
   },
   project: {
     findMany: '/projects',
+    findNames: '/projects/names',
     findById: (id: string) => `/projects/${id}`,
     findBySlug: (slug: string) => `/projects/slug/${slug}`,
 
@@ -23,6 +24,7 @@ export const apiRoutes = {
   },
   category: {
     findMany: '/categories',
+    findNames: '/categories/names',
     findById: (id: string) => `/categories/${id}`,
     findBySlug: (slug: string) => `/categories/slug/${slug}`,
     create: '/categories',
@@ -31,6 +33,7 @@ export const apiRoutes = {
   },
   marker: {
     findMany: '/markers',
+    findNames: '/markers/names',
     findById: (id: string) => `/markers/${id}`,
     findBySlug: (slug: string) => `/markers/slug/${slug}`,
     create: '/markers',

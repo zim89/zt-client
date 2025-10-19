@@ -1,4 +1,4 @@
-import type { MarkerParams } from './marker-types'
+import type { MarkerNamesParams, MarkerParams } from './marker-types'
 
 export const markerKeys = {
   root: ['marker'] as const,
@@ -7,6 +7,9 @@ export const markerKeys = {
   lists: () => [...markerKeys.all()] as const,
   list: (filters: MarkerParams) =>
     [...markerKeys.lists(), { filters }] as const,
+
+  names: (filters: MarkerNamesParams) =>
+    [...markerKeys.root, 'names', { filters }] as const,
 
   details: () => [...markerKeys.root, 'detail'] as const,
   detail: (id: string) => [...markerKeys.details(), id] as const,

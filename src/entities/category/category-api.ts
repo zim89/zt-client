@@ -1,6 +1,6 @@
 import { categoryKeys } from './category-keys'
 import { categoryRequests } from './category-requests'
-import type { CategoryParams } from './category-types'
+import type { CategoryNamesParams, CategoryParams } from './category-types'
 
 /**
  * API class for category operations
@@ -10,6 +10,7 @@ class CategoryApi {
   findById = categoryRequests.findById
   findBySlug = categoryRequests.findBySlug
   findMany = categoryRequests.findMany
+  findNames = categoryRequests.findNames
   create = categoryRequests.create
   update = categoryRequests.update
   delete = categoryRequests.delete
@@ -43,6 +44,16 @@ class CategoryApi {
     return {
       queryKey: categoryKeys.list(params || {}),
       queryFn: () => this.findMany(params),
+    }
+  }
+
+  /**
+   * Query options for finding category names
+   */
+  findNamesOptions(params?: CategoryNamesParams) {
+    return {
+      queryKey: categoryKeys.names(params || {}),
+      queryFn: () => this.findNames(params),
     }
   }
 }

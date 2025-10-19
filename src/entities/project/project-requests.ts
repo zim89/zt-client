@@ -4,6 +4,8 @@ import type {
   AddMemberDto,
   CreateProjectDto,
   Membership,
+  ProjectNameResponse,
+  ProjectNamesParams,
   ProjectParams,
   ProjectWithCount,
   UpdateMemberRoleDto,
@@ -53,6 +55,27 @@ class ProjectRequests {
 
     const response = await axiosClient.get<PaginatedResponse<ProjectWithCount>>(
       `${apiRoutes.project.findMany}?${searchParams.toString()}`,
+    )
+
+    return response.data
+  }
+
+  /**
+   * Find project names for sidebar (minimal data with incomplete tasks count)
+   */
+  async findNames(params?: ProjectNamesParams): Promise<ProjectNameResponse[]> {
+    const searchParams = new URLSearchParams()
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value))
+        }
+      })
+    }
+
+    const response = await axiosClient.get<ProjectNameResponse[]>(
+      `${apiRoutes.project.findNames}?${searchParams.toString()}`,
     )
 
     return response.data

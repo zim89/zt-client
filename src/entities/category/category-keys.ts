@@ -1,4 +1,4 @@
-import type { CategoryParams } from './category-types'
+import type { CategoryNamesParams, CategoryParams } from './category-types'
 
 export const categoryKeys = {
   root: ['category'] as const,
@@ -7,6 +7,9 @@ export const categoryKeys = {
   lists: () => [...categoryKeys.all()] as const,
   list: (filters: CategoryParams) =>
     [...categoryKeys.lists(), { filters }] as const,
+
+  names: (filters: CategoryNamesParams) =>
+    [...categoryKeys.root, 'names', { filters }] as const,
 
   details: () => [...categoryKeys.root, 'detail'] as const,
   detail: (id: string) => [...categoryKeys.details(), id] as const,

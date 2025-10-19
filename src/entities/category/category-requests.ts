@@ -1,6 +1,8 @@
 import { apiRoutes, axiosClient } from '@/shared/api'
 import { PaginatedResponse } from '@/shared/types'
 import type {
+  CategoryNameResponse,
+  CategoryNamesParams,
   CategoryParams,
   CategoryWithCount,
   CreateCategoryDto,
@@ -12,6 +14,29 @@ import type {
  * Contains all HTTP methods for category operations
  */
 class CategoryRequests {
+  /**
+   * Find category names for sidebar (minimal data with incomplete tasks count)
+   */
+  async findNames(
+    params?: CategoryNamesParams,
+  ): Promise<CategoryNameResponse[]> {
+    const searchParams = new URLSearchParams()
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value))
+        }
+      })
+    }
+
+    const response = await axiosClient.get<CategoryNameResponse[]>(
+      `${apiRoutes.category.findNames}?${searchParams.toString()}`,
+    )
+
+    return response.data
+  }
+
   /**
    * Find category by ID
    */

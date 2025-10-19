@@ -1,6 +1,6 @@
 import { projectKeys } from './project-keys'
 import { projectRequests } from './project-requests'
-import type { ProjectParams } from './project-types'
+import type { ProjectNamesParams, ProjectParams } from './project-types'
 
 /**
  * API class for project operations
@@ -10,6 +10,7 @@ class ProjectApi {
   findById = projectRequests.findById
   findBySlug = projectRequests.findBySlug
   findMany = projectRequests.findMany
+  findNames = projectRequests.findNames
   create = projectRequests.create
   update = projectRequests.update
   delete = projectRequests.delete
@@ -46,6 +47,16 @@ class ProjectApi {
     return {
       queryKey: projectKeys.list(params || {}),
       queryFn: () => this.findMany(params),
+    }
+  }
+
+  /**
+   * Query options for finding project names
+   */
+  findNamesOptions(params?: ProjectNamesParams) {
+    return {
+      queryKey: projectKeys.names(params || {}),
+      queryFn: () => this.findNames(params),
     }
   }
 }
