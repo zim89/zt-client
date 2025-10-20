@@ -6,14 +6,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/shared/components/ui/collapsible'
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuLabel,
-//   DropdownMenuSeparator,
-//   DropdownMenuTrigger,
-// } from '@/shared/components/ui/dropdown-menu'
 import {
   SidebarGroup,
   SidebarMenu,
@@ -25,18 +17,16 @@ import {
 } from '@/shared/components/ui/sidebar'
 
 export const NavProjects = () => {
-  const { data, isLoading, isError } = useFindProjectNames()
-
-  console.log('🚸 projects data:', data)
-
-  if (isLoading) return <div>Loading...</div>
-  if (isError) return <div>Error fetching projects</div>
-  if (!data) return <div>No data</div>
+  const { data } = useFindProjectNames()
 
   return (
     <SidebarGroup>
       <SidebarMenu>
-        <Collapsible asChild defaultOpen={true} className='group/collapsible'>
+        <Collapsible
+          asChild
+          defaultOpen={data ? true : false}
+          className='group/collapsible'
+        >
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
               <SidebarMenuButton tooltip='Projects'>
@@ -46,24 +36,13 @@ export const NavProjects = () => {
               </SidebarMenuButton>
             </CollapsibleTrigger>
             <CollapsibleContent>
-              {data.map(item => (
+              {data?.map(item => (
                 <SidebarMenuSub key={item.id}>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
-                      <Link href={`/tasks?project=${item.id}`}>
+                      <Link href={`/tasks?project=${item.slug}`}>
                         <span>{item.name}</span>
                       </Link>
-                      {/* <DropdownMenu>
-                        <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>Profile</DropdownMenuItem>
-                          <DropdownMenuItem>Billing</DropdownMenuItem>
-                          <DropdownMenuItem>Team</DropdownMenuItem>
-                          <DropdownMenuItem>Subscription</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu> */}
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
