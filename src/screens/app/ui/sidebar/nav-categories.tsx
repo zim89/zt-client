@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { BriefcaseBusinessIcon, ChevronRight } from 'lucide-react'
-import { CreateProjectDialog, useFindProjectNames } from '@/features/project'
+import { ChevronRight, FolderClosedIcon } from 'lucide-react'
+import { CreateCategoryDialog, useFindCategoryNames } from '@/features/category'
 import {
   Collapsible,
   CollapsibleContent,
@@ -17,8 +17,8 @@ import {
   SidebarMenuSubItem,
 } from '@/shared/components/ui/sidebar'
 
-export const NavProjects = () => {
-  const { data } = useFindProjectNames()
+export const NavCategories = () => {
+  const { data } = useFindCategoryNames()
   const [isOpen, setIsOpen] = useState(false)
 
   // Открываем секцию когда данные загружены
@@ -39,9 +39,9 @@ export const NavProjects = () => {
         >
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip='Projects'>
-                <BriefcaseBusinessIcon />
-                <span>Projects</span>
+              <SidebarMenuButton tooltip='Categories'>
+                <FolderClosedIcon />
+                <span>Categories</span>
                 <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
               </SidebarMenuButton>
             </CollapsibleTrigger>
@@ -50,7 +50,7 @@ export const NavProjects = () => {
                 <SidebarMenuSub key={item.id}>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
-                      <Link href={`/tasks?project=${item.slug}`}>
+                      <Link href={`/tasks?category=${item.slug}`}>
                         <span>{item.name}</span>
                       </Link>
                     </SidebarMenuSubButton>
@@ -59,7 +59,7 @@ export const NavProjects = () => {
               ))}
               <SidebarMenuSub>
                 <SidebarMenuSubItem>
-                  <CreateProjectDialog />
+                  <CreateCategoryDialog />
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
             </CollapsibleContent>

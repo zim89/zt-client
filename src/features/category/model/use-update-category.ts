@@ -64,6 +64,7 @@ export const useUpdateCategory = (options: UseUpdateCategoryOptions = {}) => {
         queryKey: categoryKeys.detail(variables.id),
       })
       queryClient.invalidateQueries({ queryKey: categoryKeys.all() })
+      queryClient.invalidateQueries({ queryKey: categoryKeys.names({}) })
 
       // Call success callback
       options.onSuccess?.(data)

@@ -20,6 +20,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/shared/components/ui/sidebar'
+import { NavCategories } from './nav-categories'
 import { NavMain } from './nav-main'
 import { NavProjects } from './nav-projects'
 import { NavUser } from './nav-user'
@@ -162,6 +163,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavProjects />
+        <NavCategories />
+
         <NavMain items={data.navMain} />
         {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>

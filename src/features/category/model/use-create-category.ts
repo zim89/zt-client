@@ -38,6 +38,7 @@ export const useCreateCategory = (options: UseCreateCategoryOptions = {}) => {
 
       // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: categoryKeys.all() })
+      queryClient.invalidateQueries({ queryKey: categoryKeys.names({}) })
 
       // Call success callback
       options.onSuccess?.(data)

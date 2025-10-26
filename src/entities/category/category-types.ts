@@ -9,7 +9,6 @@ export type CategoryParams = {
   search?: string
   sortBy?: string
   sortOrder?: 'asc' | 'desc'
-  projectId?: string
 }
 
 /** Parameters for category names requests (sidebar) */
@@ -32,7 +31,7 @@ export type Category = {
 
   name: string
   description: string | null
-  projectId: string
+  userId: string
 }
 
 /** Category with count of related entities */
@@ -50,7 +49,6 @@ export type CategoryWithCount = Category & {
 export type CreateCategoryDto = {
   name: string
   description?: string
-  projectId: string
 }
 
 /** Update category */

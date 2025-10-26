@@ -46,6 +46,7 @@ export const useDeleteCategory = (options: UseDeleteCategoryOptions = {}) => {
 
       // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: categoryKeys.all() })
+      queryClient.invalidateQueries({ queryKey: categoryKeys.names({}) })
 
       // Call success callback
       options.onSuccess?.()
@@ -73,6 +74,7 @@ export const useDeleteCategory = (options: UseDeleteCategoryOptions = {}) => {
     onSettled: (_data, _error, _id) => {
       // Always invalidate after error or success
       queryClient.invalidateQueries({ queryKey: categoryKeys.all() })
+      queryClient.invalidateQueries({ queryKey: categoryKeys.names({}) })
 
       // Call settled callback
       options.onSettled?.()
