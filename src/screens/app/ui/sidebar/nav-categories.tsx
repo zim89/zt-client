@@ -16,6 +16,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/shared/components/ui/sidebar'
+import { appRoutes } from '@/shared/config'
 
 export const NavCategories = () => {
   const { data } = useFindCategoryNames()
@@ -50,7 +51,10 @@ export const NavCategories = () => {
                 <SidebarMenuSub key={item.id}>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
-                      <Link href={`/tasks?category=${item.slug}`}>
+                      <Link
+                        href={appRoutes.app.tasks.byCategory(item.slug)}
+                        prefetch={true}
+                      >
                         <span>{item.name}</span>
                       </Link>
                     </SidebarMenuSubButton>

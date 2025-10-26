@@ -148,7 +148,13 @@
 }
 
 @layer components {
-  /* !Tiptap Editor */
+  /** PAGES */
+
+  .page-title {
+    @apply text-center text-2xl font-bold;
+  }
+
+  /** TIPTAP EDITOR */
   .tiptap {
     /** Basic List Styles */
     ul:not([data-type='taskList']) {

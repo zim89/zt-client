@@ -11,10 +11,10 @@ export type TaskParams = {
   search?: string
   sortBy?: string
   sortOrder?: 'asc' | 'desc'
-  projectId?: string
+  projectSlug?: string
   status?: TaskStatus
   assigneeId?: string
-  categoryId?: string
+  categorySlug?: string
   contactId?: string
   creatorId?: string
   dueDateFrom?: string
@@ -38,7 +38,7 @@ export type Task = {
   status: TaskStatus
   note: string | null
   dueDate: string | null
-  projectId: string
+  projectId: string | null
   categoryId: string | null
   contactId: string | null
   creatorId: string
@@ -96,10 +96,10 @@ export type TaskWithRelations = Task & {
 export type CreateTaskDto = {
   name: string
   description?: string
-  status: TaskStatus
+  status?: TaskStatus
   note?: string
   dueDate?: string
-  projectId: string
+  projectId?: string | null
   categoryId?: string
   contactId?: string
   assigneeId?: string
@@ -112,7 +112,7 @@ export type UpdateTaskDto = {
   status?: TaskStatus
   note?: string
   dueDate?: string
-  projectId?: string
+  projectId?: string | null
   categoryId?: string
   contactId?: string
   assigneeId?: string

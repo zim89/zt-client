@@ -12,5 +12,6 @@ import { projectApi } from '@/entities/project'
 export const useFindProjectBySlug = (slug: string) => {
   return useQuery({
     ...projectApi.findBySlugOptions(slug),
+    enabled: !!slug,
   })
 }

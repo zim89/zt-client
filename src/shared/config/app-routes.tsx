@@ -10,7 +10,11 @@ export const appRoutes = {
   },
   app: {
     index: '/app',
-    tasks: '/app/tasks',
+    tasks: {
+      index: '/app/tasks',
+      byCategory: (slug: string) => `/app/tasks/categories/${slug}`,
+      byProject: (slug: string) => `/app/tasks/projects/${slug}`,
+    },
     projects: '/app/projects',
   },
 }

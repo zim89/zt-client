@@ -16,6 +16,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/shared/components/ui/sidebar'
+import { appRoutes } from '@/shared/config'
 
 export const NavProjects = () => {
   const { data } = useFindProjectNames()
@@ -50,7 +51,10 @@ export const NavProjects = () => {
                 <SidebarMenuSub key={item.id}>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
-                      <Link href={`/tasks?project=${item.slug}`}>
+                      <Link
+                        href={appRoutes.app.tasks.byProject(item.slug)}
+                        prefetch={true}
+                      >
                         <span>{item.name}</span>
                       </Link>
                     </SidebarMenuSubButton>
