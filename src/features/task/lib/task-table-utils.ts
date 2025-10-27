@@ -18,7 +18,7 @@ export const formatTaskStatus = (status: string): string => {
  * @returns Formatted date string or "No due date"
  */
 export const formatTaskDueDate = (dueDate: string | null): string => {
-  if (!dueDate) return 'No due date'
+  if (!dueDate) return ''
 
   try {
     const date = new Date(dueDate)
@@ -89,7 +89,7 @@ export const formatTaskUpdatedAt = (updatedAt: string): string => {
 export const getUserDisplayName = (
   user: { firstName: string; lastName: string } | null | undefined,
 ): string => {
-  if (!user) return 'Unassigned'
+  if (!user) return ''
   return `${user.firstName} ${user.lastName}`.trim()
 }
 
@@ -114,7 +114,7 @@ export const getProjectDisplayName = (
 export const getCategoryDisplayName = (
   category: { name: string } | null | undefined,
 ): string => {
-  return category?.name ?? 'No category'
+  return category?.name ?? ''
 }
 
 /**
@@ -126,7 +126,7 @@ export const getCategoryDisplayName = (
 export const getContactDisplayName = (
   contact: { name: string } | null | undefined,
 ): string => {
-  return contact?.name ?? 'No contact'
+  return contact?.name ?? ''
 }
 
 /**

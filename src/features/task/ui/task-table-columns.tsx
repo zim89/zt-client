@@ -110,7 +110,7 @@ export const createTaskTableColumns = (
       createSortableColumn('assignee', 'Assignee', ({ row }) => {
         const assignee = row.original.assignee
         if (!assignee) {
-          return <span className='text-muted-foreground'>Unassigned</span>
+          return <span className='text-muted-foreground'>&nbsp;</span>
         }
 
         return (
