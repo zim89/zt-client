@@ -17,6 +17,8 @@ export const TasksByProjectPage = ({ projectSlug }: Props) => {
     error,
   } = useFindTasks({ projectSlug, limit: 10000 })
 
+  console.log('🚸 tasksData', tasksData)
+
   if (isLoading) {
     return (
       <div className='space-y-6'>

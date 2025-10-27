@@ -38,8 +38,16 @@ export type Task = {
   status: TaskStatus
   note: string | null
   dueDate: string | null
-  projectId: string | null
-  categoryId: string | null
+  project: {
+    id: string
+    name: string
+    slug: string
+  } | null
+  category: {
+    id: string
+    name: string
+    slug: string
+  } | null
   contactId: string | null
   creatorId: string
   assigneeId: string | null
@@ -47,16 +55,6 @@ export type Task = {
 
 /** Task with related entities */
 export type TaskWithRelations = Task & {
-  project?: {
-    id: string
-    name: string
-    slug: string
-  }
-  category?: {
-    id: string
-    name: string
-    slug: string
-  } | null
   creator?: {
     id: string
     email: string
