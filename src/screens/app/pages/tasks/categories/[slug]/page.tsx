@@ -2,12 +2,7 @@
 
 import { FolderIcon } from 'lucide-react'
 import { useFindCategoryBySlug } from '@/features/category'
-import {
-  CreateTaskDialog,
-  TaskTable,
-  useCreateTask,
-  useFindTasks,
-} from '@/features/task'
+import { CreateTaskDialog, TaskTable, useFindTasks } from '@/features/task'
 import { EmptyData } from '@/shared/components'
 
 type Props = {
@@ -22,30 +17,13 @@ export const TasksByCategoryPage = ({ categorySlug }: Props) => {
     error,
   } = useFindTasks({ categorySlug, limit: 10000 })
 
-  const createTaskMutation = useCreateTask({
-    onSuccess: () => {
-      // Task will be automatically added to the list via query invalidation
-    },
-  })
-
-  const handleCreateTask = async (name: string) => {
-    if (!category?.id) return
-
-    try {
-      await createTaskMutation.mutateAsync({
-        name,
-        categoryId: category.id,
-        status: 'NOT_STARTED',
-      })
-    } catch {
-      // Error handling is done in the mutation hook
-    }
-  }
-
   if (isLoading) {
     return (
       <div className='space-y-6'>
         <h1 className='page-title'>Loading...</h1>
+        <div className='flex h-64 items-center justify-center'>
+          <div className='text-muted-foreground'>Loading tasks...</div>
+        </div>
       </div>
     )
   }
@@ -53,10 +31,12 @@ export const TasksByCategoryPage = ({ categorySlug }: Props) => {
   if (error) {
     return (
       <div className='space-y-6'>
-        <h1 className='page-title'>Error loading tasks</h1>
-        <p className='text-muted-foreground'>
-          {error instanceof Error ? error.message : 'Unknown error occurred'}
-        </p>
+        <h1 className='page-title'>{category?.name ?? 'Category'}</h1>
+        <div className='flex h-64 items-center justify-center'>
+          <div className='text-red-600'>
+            Error loading tasks: {error.message}
+          </div>
+        </div>
       </div>
     )
   }
@@ -83,11 +63,6 @@ export const TasksByCategoryPage = ({ categorySlug }: Props) => {
         <TaskTable
           data={tasks}
           searchPlaceholder={`Search tasks in ${category?.name}...`}
-          showTaskCreator={true}
-          onCreateTask={handleCreateTask}
-          isCreatingTask={createTaskMutation.isPending}
-          taskCreatorPlaceholder={`Add task to ${category?.name}...`}
-          taskCreatorButtonText='Add Task'
         />
       )}
     </div>

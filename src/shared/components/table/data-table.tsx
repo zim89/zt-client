@@ -36,8 +36,6 @@ interface Props<TData, TValue> {
   data: TData[]
   searchKey?: string
   searchPlaceholder?: string
-  /** Component to render for task creation */
-  taskCreatorComponent?: React.ReactNode
 }
 
 /**
@@ -53,7 +51,6 @@ export const DataTable = <TData, TValue>({
   data,
   searchKey,
   searchPlaceholder = 'Search...',
-  taskCreatorComponent,
 }: Props<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -101,7 +98,6 @@ export const DataTable = <TData, TValue>({
           )}
         </div>
         <div className='flex items-center space-x-2'>
-          {taskCreatorComponent}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant='outline'>

@@ -2,12 +2,7 @@
 
 import { BriefcaseBusinessIcon } from 'lucide-react'
 import { useFindProjectBySlug } from '@/features/project'
-import {
-  CreateTaskDialog,
-  TaskTable,
-  useCreateTask,
-  useFindTasks,
-} from '@/features/task'
+import { CreateTaskDialog, TaskTable, useFindTasks } from '@/features/task'
 import { EmptyData } from '@/shared/components'
 
 type Props = {
@@ -21,26 +16,6 @@ export const TasksByProjectPage = ({ projectSlug }: Props) => {
     isLoading,
     error,
   } = useFindTasks({ projectSlug, limit: 10000 })
-
-  const createTaskMutation = useCreateTask({
-    onSuccess: () => {
-      // Task will be automatically added to the list via query invalidation
-    },
-  })
-
-  const handleCreateTask = async (name: string) => {
-    if (!project?.id) return
-
-    try {
-      await createTaskMutation.mutateAsync({
-        name,
-        projectId: project.id,
-        status: 'NOT_STARTED',
-      })
-    } catch {
-      // Error handling is done in the mutation hook
-    }
-  }
 
   if (isLoading) {
     return (
@@ -88,11 +63,6 @@ export const TasksByProjectPage = ({ projectSlug }: Props) => {
         <TaskTable
           data={tasks}
           searchPlaceholder={`Search tasks in ${project?.name}...`}
-          showTaskCreator={true}
-          onCreateTask={handleCreateTask}
-          isCreatingTask={createTaskMutation.isPending}
-          taskCreatorPlaceholder={`Add task to ${project?.name}...`}
-          taskCreatorButtonText='Add Task'
         />
       )}
     </div>
