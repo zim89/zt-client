@@ -1,9 +1,8 @@
+import { useState } from 'react'
 import { format } from 'date-fns'
-import { CalendarIcon } from 'lucide-react'
-import { useFindCategoryNames } from '@/features/category'
-import { useFindProjectNames } from '@/features/project'
-import type { CategoryNameResponse } from '@/entities/category'
-import type { ProjectNameResponse } from '@/entities/project'
+import { CalendarIcon, ChevronDownIcon, FolderIcon } from 'lucide-react'
+import { SelectCategoryDialog } from '@/features/category'
+import { SelectProjectDialog } from '@/features/project'
 import { Button } from '@/shared/components/ui/button'
 import { Calendar } from '@/shared/components/ui/calendar'
 import { DialogClose, DialogFooter } from '@/shared/components/ui/dialog'
@@ -39,8 +38,8 @@ type Props = {
   taskId?: string
   onSuccess?: () => void
   defaultValues?: {
-    projectId?: string
-    categoryId?: string
+    project?: { id: string; name: string; slug: string } | null
+    category?: { id: string; name: string; slug: string } | null
   }
 }
 
@@ -50,6 +49,9 @@ export const TaskForm = ({
   onSuccess,
   defaultValues,
 }: Props) => {
+  const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false)
+  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false)
+
   const { form, onSubmit, isLoading, buttonText } = useTaskForm({
     mode,
     taskId,
@@ -57,12 +59,9 @@ export const TaskForm = ({
     defaultValues,
   })
 
-  // Get projects and categories for select options
-  const { data: projectsData } = useFindProjectNames()
-  const { data: categoriesData } = useFindCategoryNames()
-
-  const projects = projectsData ?? []
-  const categories = categoriesData ?? []
+  // Get selected project and category from form
+  const selectedProject = form.watch('project')
+  const selectedCategory = form.watch('category')
 
   return (
     <Form {...form}>
@@ -104,6 +103,7 @@ export const TaskForm = ({
           )}
         />
 
+        {/* STATUS */}
         <FormField
           control={form.control}
           name='status'
@@ -130,67 +130,67 @@ export const TaskForm = ({
           )}
         />
 
-        <div className='grid grid-cols-2 gap-4'>
-          <FormField
-            control={form.control}
-            name='projectId'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Project</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
+        {/* PROJECT */}
+        <FormField
+          control={form.control}
+          name='project'
+          render={() => (
+            <FormItem>
+              <div className='flex items-center gap-3'>
+                <Button
+                  variant='outline'
+                  type='button'
+                  className='flex w-36 flex-shrink-0 items-center justify-between rounded'
+                  onClick={() => setIsProjectDialogOpen(true)}
                 >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder='Select project' />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value='none'>No project</SelectItem>
-                    {projects.map((project: ProjectNameResponse) => (
-                      <SelectItem key={project.id} value={project.id}>
-                        {project.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormDescription>Optional project assignment.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormLabel>Project</FormLabel>
+                  <ChevronDownIcon className='size-4' />
+                </Button>
 
-          <FormField
-            control={form.control}
-            name='categoryId'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Category</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
+                <FormControl>
+                  <div className='bg-muted flex h-9 flex-1 items-center gap-2 rounded px-2'>
+                    {selectedProject && (
+                      <>
+                        <FolderIcon className='mr-2 h-4 w-4 text-orange-500' />
+                        <span className='truncate'>{selectedProject.name}</span>
+                      </>
+                    )}
+                  </div>
+                </FormControl>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='category'
+          render={() => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <FormControl>
+                <Button
+                  type='button'
+                  variant='outline'
+                  className='w-full justify-start text-left font-normal'
+                  onClick={() => setIsCategoryDialogOpen(true)}
                 >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder='Select category' />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value='none'>No category</SelectItem>
-                    {categories.map((category: CategoryNameResponse) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormDescription>Optional category assignment.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+                  {selectedCategory ? (
+                    <>
+                      <FolderIcon className='mr-2 h-4 w-4 text-blue-500' />
+                      <span className='truncate'>{selectedCategory.name}</span>
+                    </>
+                  ) : (
+                    'Select category'
+                  )}
+                </Button>
+              </FormControl>
+              <FormDescription>Optional category assignment.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -256,6 +256,26 @@ export const TaskForm = ({
           </Button>
         </DialogFooter>
       </form>
+
+      {/* Project Selection Dialog */}
+      <SelectProjectDialog
+        open={isProjectDialogOpen}
+        onOpenChange={setIsProjectDialogOpen}
+        onSelect={project => {
+          form.setValue('project', project)
+        }}
+        selectedProjectId={selectedProject?.id ?? null}
+      />
+
+      {/* Category Selection Dialog */}
+      <SelectCategoryDialog
+        open={isCategoryDialogOpen}
+        onOpenChange={setIsCategoryDialogOpen}
+        onSelect={category => {
+          form.setValue('category', category)
+        }}
+        selectedCategoryId={selectedCategory?.id ?? null}
+      />
     </Form>
   )
 }

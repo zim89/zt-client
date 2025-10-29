@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { BriefcaseBusinessIcon, ChevronRight } from 'lucide-react'
+import {
+  BriefcaseBusinessIcon,
+  ChevronRight,
+  CirclePlusIcon,
+} from 'lucide-react'
 import { CreateProjectDialog, useFindProjectNames } from '@/features/project'
 import {
   Collapsible,
@@ -63,7 +67,14 @@ export const NavProjects = () => {
               ))}
               <SidebarMenuSub>
                 <SidebarMenuSubItem>
-                  <CreateProjectDialog />
+                  <CreateProjectDialog
+                    trigger={
+                      <SidebarMenuSubButton>
+                        <CirclePlusIcon />
+                        <span>Add Project</span>
+                      </SidebarMenuSubButton>
+                    }
+                  />
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
             </CollapsibleContent>

@@ -7,6 +7,20 @@ import { z } from 'zod'
 import { formModes, taskStatuses, type FormMode } from '@/shared/constants'
 import { useCreateTask, useFindTaskById, useUpdateTask } from './'
 
+// Project picker object type
+const projectPickerType = z.object({
+  id: z.string(),
+  name: z.string(),
+  slug: z.string(),
+})
+
+// Category picker object type
+const categoryPickerType = z.object({
+  id: z.string(),
+  name: z.string(),
+  slug: z.string(),
+})
+
 // Form schema
 const taskFormSchema = z.object({
   name: z
@@ -17,8 +31,8 @@ const taskFormSchema = z.object({
   status: z.string().optional(),
   note: z.string().optional(),
   dueDate: z.date().optional(),
-  projectId: z.string().optional(),
-  categoryId: z.string().optional(),
+  project: projectPickerType.nullable().optional(),
+  category: categoryPickerType.nullable().optional(),
   contactId: z.string().optional(),
   assigneeId: z.string().optional(),
 })
@@ -32,8 +46,8 @@ export const taskDefaultValues: TaskFormValues = {
   status: taskStatuses.notStarted,
   note: '',
   dueDate: undefined,
-  projectId: 'none',
-  categoryId: 'none',
+  project: null,
+  category: null,
   contactId: undefined,
   assigneeId: undefined,
 }
@@ -43,8 +57,8 @@ type Props = {
   taskId?: string
   onSuccess?: () => void
   defaultValues?: {
-    projectId?: string
-    categoryId?: string
+    project?: { id: string; name: string; slug: string } | null
+    category?: { id: string; name: string; slug: string } | null
   }
 }
 
@@ -68,9 +82,8 @@ export const useTaskForm = ({
       return {
         ...taskDefaultValues,
         ...defaultValues,
-        // Convert undefined to 'none' for form fields
-        projectId: defaultValues?.projectId || 'none',
-        categoryId: defaultValues?.categoryId || 'none',
+        project: defaultValues?.project ?? null,
+        category: defaultValues?.category ?? null,
       }
     }
 
@@ -82,8 +95,8 @@ export const useTaskForm = ({
         status: task.status,
         note: task.note || '',
         dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
-        projectId: task.projectId || 'none',
-        categoryId: task.categoryId || 'none',
+        project: task.project,
+        category: task.category,
         contactId: task.contactId || undefined,
         assigneeId: task.assigneeId || undefined,
       }
@@ -110,8 +123,8 @@ export const useTaskForm = ({
         status: task.status,
         note: task.note || '',
         dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
-        projectId: task.projectId || 'none',
-        categoryId: task.categoryId || 'none',
+        project: task.project,
+        category: task.category,
         contactId: task.contactId || undefined,
         assigneeId: task.assigneeId || undefined,
       })
@@ -141,8 +154,8 @@ export const useTaskForm = ({
       status: values.status as (typeof taskStatuses)[keyof typeof taskStatuses],
       note: values.note,
       dueDate: values.dueDate?.toISOString(),
-      projectId: values.projectId === 'none' ? null : values.projectId,
-      categoryId: values.categoryId === 'none' ? undefined : values.categoryId,
+      projectId: values.project?.id ?? null,
+      categoryId: values.category?.id ?? undefined,
       contactId: values.contactId,
       assigneeId: values.assigneeId,
     }
