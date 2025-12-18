@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { CirclePlusIcon } from 'lucide-react'
+import { useFindCategoryById } from '@/features/category'
+import { useFindProjectById } from '@/features/project'
 import { Button } from '@/shared/components/ui/button'
 import {
   Dialog,
@@ -35,6 +37,24 @@ export const CreateTaskDialog = ({
 }: Props) => {
   const [open, setOpen] = useState(false)
 
+  // Fetch project and category data when IDs are provided
+  const { data: project } = useFindProjectById(defaultValues?.projectId ?? '')
+  const { data: category } = useFindCategoryById(
+    defaultValues?.categoryId ?? '',
+  )
+
+  // Convert IDs to objects expected by TaskForm
+  const formDefaultValues = useMemo(() => {
+    return {
+      project: project
+        ? { id: project.id, name: project.name, slug: project.slug }
+        : null,
+      category: category
+        ? { id: category.id, name: category.name, slug: category.slug }
+        : null,
+    }
+  }, [project, category])
+
   const handleSuccess = () => {
     setOpen(false)
   }
@@ -55,7 +75,7 @@ export const CreateTaskDialog = ({
         <TaskForm
           mode='create'
           onSuccess={handleSuccess}
-          defaultValues={defaultValues}
+          defaultValues={formDefaultValues}
         />
       </DialogContent>
     </Dialog>

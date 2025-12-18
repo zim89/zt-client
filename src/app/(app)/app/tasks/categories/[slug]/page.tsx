@@ -43,7 +43,7 @@ const Page = async ({ params }: Props) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <TasksByCategoryPage />
+      <TasksByCategoryPage categorySlug={slug} />
     </HydrationBoundary>
   )
 }
