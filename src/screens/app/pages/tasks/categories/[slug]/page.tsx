@@ -55,7 +55,15 @@ export const TasksByCategoryPage = ({ categorySlug }: Props) => {
           action={
             <CreateTaskDialog
               buttonText='Create Task'
-              defaultValues={{ categoryId: category?.id }}
+              defaultValues={{
+                category: category
+                  ? {
+                      id: category.id,
+                      name: category.name,
+                      slug: category.slug,
+                    }
+                  : undefined,
+              }}
             />
           }
         />

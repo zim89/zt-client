@@ -4,7 +4,12 @@ import { useEffect, useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { formModes, taskStatuses, type FormMode } from '@/shared/constants'
+import {
+  formModes,
+  taskStatuses,
+  type FormMode,
+  type TaskStatus,
+} from '@/shared/constants'
 import { useCreateTask, useFindTaskById, useUpdateTask } from './'
 
 // Project picker object type
@@ -28,7 +33,9 @@ const taskFormSchema = z.object({
     .min(1, 'Task name is required')
     .max(200, 'Task name is too long'),
   description: z.string().optional(),
-  status: z.string().optional(),
+  status: z.enum(Object.values(taskStatuses) as [TaskStatus, ...TaskStatus[]], {
+    message: 'Status is required',
+  }),
   note: z.string().optional(),
   dueDate: z.date().optional(),
   project: projectPickerType.nullable().optional(),
@@ -131,6 +138,28 @@ export const useTaskForm = ({
     }
   }, [form, mode, task])
 
+  // Update project and category when defaultValues change (for create mode)
+  useEffect(() => {
+    if (mode === formModes.create) {
+      const currentProject = form.getValues('project')
+      const currentCategory = form.getValues('category')
+      const newProject = defaultValues?.project ?? null
+      const newCategory = defaultValues?.category ?? null
+
+      // Only update if values actually changed
+      if (
+        currentProject?.id !== newProject?.id ||
+        currentCategory?.id !== newCategory?.id
+      ) {
+        form.reset({
+          ...form.getValues(),
+          project: newProject,
+          category: newCategory,
+        })
+      }
+    }
+  }, [form, mode, defaultValues])
+
   // Mutations
   const createTask = useCreateTask({
     onSuccess: () => {
@@ -151,7 +180,7 @@ export const useTaskForm = ({
     const taskData = {
       name: values.name,
       description: values.description,
-      status: values.status as (typeof taskStatuses)[keyof typeof taskStatuses],
+      status: values.status,
       note: values.note,
       dueDate: values.dueDate?.toISOString(),
       projectId: values.project?.id ?? null,
@@ -173,8 +202,8 @@ export const useTaskForm = ({
   const buttonText = isLoading
     ? 'Processing...'
     : mode === formModes.create
-      ? 'Create Task'
-      : 'Update Task'
+      ? 'Create'
+      : 'Update'
 
   return {
     // Form state

@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { format } from 'date-fns'
-import { CalendarIcon, ChevronDownIcon, FolderIcon } from 'lucide-react'
+import {
+  BriefcaseBusinessIcon,
+  CalendarIcon,
+  ChevronDownIcon,
+  FolderIcon,
+} from 'lucide-react'
 import { SelectCategoryDialog } from '@/features/category'
 import { SelectProjectDialog } from '@/features/project'
 import { Button } from '@/shared/components/ui/button'
@@ -26,11 +31,15 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from '@/shared/components/ui/select'
 import { Spinner } from '@/shared/components/ui/spinner'
 import { Textarea } from '@/shared/components/ui/textarea'
-import { taskStatuses, type FormMode } from '@/shared/constants'
+import {
+  formModes,
+  taskStatusOptions,
+  type FormMode,
+  type TaskStatusOption,
+} from '@/shared/constants'
 import { useTaskForm } from '../model'
 
 type Props = {
@@ -44,13 +53,14 @@ type Props = {
 }
 
 export const TaskForm = ({
-  mode = 'create',
+  mode = formModes.create,
   taskId,
   onSuccess,
   defaultValues,
 }: Props) => {
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false)
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false)
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
 
   const { form, onSubmit, isLoading, buttonText } = useTaskForm({
     mode,
@@ -66,6 +76,7 @@ export const TaskForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+        {/* NAME */}
         <FormField
           control={form.control}
           name='name'
@@ -73,14 +84,14 @@ export const TaskForm = ({
             <FormItem>
               <FormLabel>Task Name</FormLabel>
               <FormControl>
-                <Input placeholder='Enter task name' {...field} />
+                <Input placeholder='Enter task name ...' {...field} />
               </FormControl>
-              <FormDescription>The name of the task.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* DESCRIPTION */}
         <FormField
           control={form.control}
           name='description'
@@ -90,7 +101,7 @@ export const TaskForm = ({
               <FormControl>
                 <Textarea
                   rows={3}
-                  placeholder='Task description'
+                  placeholder='Enter task description ...'
                   className='resize-none'
                   {...field}
                 />
@@ -107,27 +118,63 @@ export const TaskForm = ({
         <FormField
           control={form.control}
           name='status'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Status</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Select status' />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {Object.entries(taskStatuses).map(([key, value]) => (
-                    <SelectItem key={key} value={value}>
-                      {value.charAt(0).toUpperCase() +
-                        value.slice(1).toLowerCase()}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
+          render={({ field }) => {
+            const selectedStatus = field.value
+            const selectedOption = selectedStatus
+              ? taskStatusOptions[selectedStatus]
+              : null
+
+            return (
+              <FormItem>
+                <div className='flex items-center gap-3'>
+                  <Select onValueChange={field.onChange} value={selectedStatus}>
+                    <FormControl>
+                      <SelectTrigger className='hover:bg-accent w-36 shrink-0 transition-colors duration-300'>
+                        <FormLabel>Status</FormLabel>
+                      </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                      {(
+                        Object.values(taskStatusOptions) as TaskStatusOption[]
+                      ).map(option => (
+                        <SelectItem
+                          key={option.value}
+                          value={option.value}
+                          className='text-sm'
+                        >
+                          {(() => {
+                            const Icon = option.icon
+                            return <Icon className='size-4 shrink-0' />
+                          })()}
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <FormControl>
+                    <div className='bg-muted flex h-9 flex-1 items-center gap-2 rounded px-2 text-sm'>
+                      {selectedOption && (
+                        <>
+                          {(() => {
+                            const Icon = selectedOption.icon
+                            return (
+                              <Icon className='size-4 shrink-0 opacity-50' />
+                            )
+                          })()}
+                          <span className='truncate'>
+                            {selectedOption.label}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
         />
 
         {/* PROJECT */}
@@ -140,18 +187,18 @@ export const TaskForm = ({
                 <Button
                   variant='outline'
                   type='button'
-                  className='flex w-36 flex-shrink-0 items-center justify-between rounded'
+                  className='flex w-36 shrink-0 items-center justify-between rounded'
                   onClick={() => setIsProjectDialogOpen(true)}
                 >
                   <FormLabel>Project</FormLabel>
-                  <ChevronDownIcon className='size-4' />
+                  <ChevronDownIcon className='text-foreground/50! size-4' />
                 </Button>
 
                 <FormControl>
                   <div className='bg-muted flex h-9 flex-1 items-center gap-2 rounded px-2'>
                     {selectedProject && (
                       <>
-                        <FolderIcon className='mr-2 h-4 w-4 text-orange-500' />
+                        <BriefcaseBusinessIcon className='size-4 shrink-0 opacity-50' />
                         <span className='truncate'>{selectedProject.name}</span>
                       </>
                     )}
@@ -163,69 +210,99 @@ export const TaskForm = ({
           )}
         />
 
+        {/* CATEGORY */}
         <FormField
           control={form.control}
           name='category'
           render={() => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
-              <FormControl>
+              <div className='flex items-center gap-3'>
                 <Button
-                  type='button'
                   variant='outline'
-                  className='w-full justify-start text-left font-normal'
+                  type='button'
+                  className='flex w-36 shrink-0 items-center justify-between rounded'
                   onClick={() => setIsCategoryDialogOpen(true)}
                 >
-                  {selectedCategory ? (
-                    <>
-                      <FolderIcon className='mr-2 h-4 w-4 text-blue-500' />
-                      <span className='truncate'>{selectedCategory.name}</span>
-                    </>
-                  ) : (
-                    'Select category'
-                  )}
+                  <FormLabel>Category</FormLabel>
+                  <ChevronDownIcon className='text-foreground/50! size-4' />
                 </Button>
-              </FormControl>
-              <FormDescription>Optional category assignment.</FormDescription>
+
+                <FormControl>
+                  <div className='bg-muted flex h-9 flex-1 items-center gap-2 rounded px-2'>
+                    {selectedCategory && (
+                      <>
+                        <FolderIcon className='size-4 shrink-0 opacity-50' />
+                        <span className='truncate'>
+                          {selectedCategory.name}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </FormControl>
+              </div>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* DUE DATE */}
         <FormField
           control={form.control}
           name='dueDate'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Due Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
+              <div className='flex items-center gap-3'>
+                <Popover
+                  open={isDatePickerOpen}
+                  onOpenChange={setIsDatePickerOpen}
+                >
+                  <PopoverTrigger asChild>
                     <Button
                       variant='outline'
-                      className='w-full justify-start text-left font-normal'
+                      type='button'
+                      className='flex w-36 shrink-0 items-center justify-between rounded'
                     >
-                      <CalendarIcon className='mr-2 h-4 w-4' />
-                      {field.value ? format(field.value, 'PPP') : 'Pick a date'}
+                      <div className='flex items-center gap-2'>
+                        <FormLabel>Due Date</FormLabel>
+                      </div>
+                      <ChevronDownIcon className='text-foreground/50! size-4' />
                     </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className='w-auto p-0' align='start'>
-                  <Calendar
-                    mode='single'
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={date => date < new Date()}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormDescription>Optional due date for the task.</FormDescription>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className='w-[250px] overflow-hidden p-0'
+                    align='start'
+                  >
+                    <Calendar
+                      mode='single'
+                      selected={field.value}
+                      onSelect={date => {
+                        field.onChange(date)
+                        setIsDatePickerOpen(false)
+                      }}
+                      disabled={date => date < new Date()}
+                    />
+                  </PopoverContent>
+                </Popover>
+
+                <FormControl>
+                  <div className='bg-muted flex h-9 flex-1 items-center gap-2 rounded px-2'>
+                    {field.value && (
+                      <>
+                        <CalendarIcon className='size-4 shrink-0 opacity-50' />
+                        <span className='truncate'>
+                          {format(field.value, 'MM.dd.yyyy')}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </FormControl>
+              </div>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* NOTE */}
         <FormField
           control={form.control}
           name='note'
@@ -240,7 +317,6 @@ export const TaskForm = ({
                   {...field}
                 />
               </FormControl>
-              <FormDescription>Optional notes for the task.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

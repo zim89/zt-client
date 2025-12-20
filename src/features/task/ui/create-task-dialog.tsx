@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { CirclePlusIcon } from 'lucide-react'
-import { useFindCategoryById } from '@/features/category'
-import { useFindProjectById } from '@/features/project'
+import { type Category } from '@/entities/category'
+import { type Project } from '@/entities/project'
 import { Button } from '@/shared/components/ui/button'
 import {
   Dialog,
@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/shared/components/ui/dialog'
+import { formModes } from '@/shared/constants'
 import { TaskForm } from './task-form'
 
 type Props = {
@@ -25,35 +26,39 @@ type Props = {
     | 'destructive'
   /** Default values for the form */
   defaultValues?: {
-    projectId?: string
-    categoryId?: string
+    /** Project object */
+    project?: Pick<Project, 'id' | 'name' | 'slug'>
+    /** Category object */
+    category?: Pick<Category, 'id' | 'name' | 'slug'>
   }
 }
 
 export const CreateTaskDialog = ({
-  buttonText = 'Create Task',
+  buttonText = 'Create',
   buttonVariant = 'default',
   defaultValues,
 }: Props) => {
   const [open, setOpen] = useState(false)
 
-  // Fetch project and category data when IDs are provided
-  const { data: project } = useFindProjectById(defaultValues?.projectId ?? '')
-  const { data: category } = useFindCategoryById(
-    defaultValues?.categoryId ?? '',
-  )
-
-  // Convert IDs to objects expected by TaskForm
+  // Prepare form default values
   const formDefaultValues = useMemo(() => {
     return {
-      project: project
-        ? { id: project.id, name: project.name, slug: project.slug }
+      project: defaultValues?.project
+        ? {
+            id: defaultValues.project.id,
+            name: defaultValues.project.name,
+            slug: defaultValues.project.slug,
+          }
         : null,
-      category: category
-        ? { id: category.id, name: category.name, slug: category.slug }
+      category: defaultValues?.category
+        ? {
+            id: defaultValues.category.id,
+            name: defaultValues.category.name,
+            slug: defaultValues.category.slug,
+          }
         : null,
     }
-  }, [project, category])
+  }, [defaultValues])
 
   const handleSuccess = () => {
     setOpen(false)
@@ -73,7 +78,7 @@ export const CreateTaskDialog = ({
         </DialogHeader>
 
         <TaskForm
-          mode='create'
+          mode={formModes.create}
           onSuccess={handleSuccess}
           defaultValues={formDefaultValues}
         />

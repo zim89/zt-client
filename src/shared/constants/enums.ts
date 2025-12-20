@@ -44,8 +44,8 @@ export type TaskStatus = (typeof taskStatuses)[keyof typeof taskStatuses]
 
 /** Form mode enum */
 export const formModes = {
-  create: 'create',
-  edit: 'edit',
+  create: 'CREATE',
+  edit: 'EDIT',
 } as const
 
 export type FormMode = (typeof formModes)[keyof typeof formModes]

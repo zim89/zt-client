@@ -17,8 +17,6 @@ export const TasksByProjectPage = ({ projectSlug }: Props) => {
     error,
   } = useFindTasks({ projectSlug, limit: 10000 })
 
-  console.log('🚸 tasksData', tasksData)
-
   if (isLoading) {
     return (
       <div className='space-y-6'>
@@ -57,7 +55,11 @@ export const TasksByProjectPage = ({ projectSlug }: Props) => {
           action={
             <CreateTaskDialog
               buttonText='Create Task'
-              defaultValues={{ projectId: project?.id }}
+              defaultValues={{
+                project: project
+                  ? { id: project.id, name: project.name, slug: project.slug }
+                  : undefined,
+              }}
             />
           }
         />
