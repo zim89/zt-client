@@ -88,7 +88,6 @@ export const useTaskForm = ({
     if (mode === formModes.create) {
       return {
         ...taskDefaultValues,
-        ...defaultValues,
         project: defaultValues?.project ?? null,
         category: defaultValues?.category ?? null,
       }
@@ -109,10 +108,8 @@ export const useTaskForm = ({
       }
     }
 
-    return {
-      ...taskDefaultValues,
-      ...defaultValues,
-    }
+    // Fallback for create mode when task data is not available
+    return taskDefaultValues
   }, [mode, task, defaultValues])
 
   // Form instance
@@ -146,7 +143,7 @@ export const useTaskForm = ({
       const newProject = defaultValues?.project ?? null
       const newCategory = defaultValues?.category ?? null
 
-      // Only update if values actually changed
+      // Only reset if values actually changed to avoid unnecessary updates
       if (
         currentProject?.id !== newProject?.id ||
         currentCategory?.id !== newCategory?.id
@@ -158,7 +155,7 @@ export const useTaskForm = ({
         })
       }
     }
-  }, [form, mode, defaultValues])
+  }, [form, mode, defaultValues?.project, defaultValues?.category])
 
   // Mutations
   const createTask = useCreateTask({
@@ -199,16 +196,19 @@ export const useTaskForm = ({
   // UI helpers
   const isLoading = createTask.isPending || updateTask.isPending
 
-  const buttonText = isLoading
-    ? 'Processing...'
-    : mode === formModes.create
-      ? 'Create'
-      : 'Update'
+  const buttonText = useMemo(
+    () =>
+      isLoading
+        ? 'Processing...'
+        : mode === formModes.create
+          ? 'Create'
+          : 'Update',
+    [isLoading, mode],
+  )
 
   return {
     // Form state
     form,
-    defaultValues: formDefaultValues,
 
     // Handlers
     onSubmit,
